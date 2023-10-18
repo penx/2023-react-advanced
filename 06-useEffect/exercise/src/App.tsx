@@ -6,13 +6,19 @@ export default function Page() {
   const [bio, setBio] = useState<string | null>(null);
 
   useEffect(() => {
+    let current = true;
     const fetchAndUpdate = async () => {
       const result = await fetchBio(person);
-      setBio(result);
+      if (current) {
+        setBio(result);
+      }
     };
 
     setBio(null);
     fetchAndUpdate();
+    return () => {
+      current = false;
+    };
   }, [person]);
 
   return (
