@@ -1,12 +1,15 @@
+import { useId } from "react";
+
 type Props = {
   children: React.ReactNode;
 };
 
 const Checkbox: React.FC<Props> = ({ children }) => {
+  const id = useId();
   return (
     <>
-      <label>{children}</label>
-      <input type="checkbox" name="react" />
+      <label htmlFor={id}>{children}</label>
+      <input id={id} type="checkbox" name="react" />
     </>
   );
 };
