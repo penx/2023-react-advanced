@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useDeferredValue, useState } from "react";
 import nacl from "tweetnacl";
 import naclUtil from "tweetnacl-util";
 
@@ -15,10 +15,14 @@ const VerificationCode: React.FC<VerificationCodeProps> = ({ userId }) => {
   return <div>Code: {naclUtil.encodeBase64(hash)}</div>;
 };
 
+const VerificationCodeMemo = memo(VerificationCode);
+
 function App() {
   const [userId, setUserId] = useState(
     "JANEc8071923-cc08-4cd6-aeb2-d0b1ddf29863"
   );
+
+  const deferredUserId = useDeferredValue(userId);
 
   return (
     <>
@@ -39,7 +43,11 @@ function App() {
         </button>
       </div>
       <div>UserId: {userId}</div>
-      <VerificationCode userId={userId} />
+      {deferredUserId === userId ? (
+        <VerificationCodeMemo userId={deferredUserId} />
+      ) : (
+        <div>Calculating</div>
+      )}
     </>
   );
 }
