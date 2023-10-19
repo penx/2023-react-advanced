@@ -1,16 +1,12 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
+const subscribe = (listener: () => void) => {
+  window?.addEventListener("scroll", listener);
+  return () => {
+    window?.addEventListener("scroll", listener);
+  };
+};
+const selector = () => window?.scrollY;
 export function useYScroll() {
-  const [yScroll, setYScroll] = useState(window?.scrollY || 0);
-  useEffect(() => {
-    function onScrollChange() {
-      setYScroll(window?.scrollY);
-    }
-
-    window?.addEventListener("scroll", onScrollChange);
-    return () => {
-      window?.addEventListener("scroll", onScrollChange);
-    };
-  }, []);
-  return yScroll;
+  return useSyncExternalStore(subscribe, selector);
 }
